@@ -45,10 +45,10 @@ extra_css:
 # 4. 导航栏配置
 nav:
   - 首页:
-      - 门户中心: index.md
-      - 关于作者: about.md
+      - 展示首页: index.md
+      - 关于猪包: about.md
       - 快速索引:
-          - 计算机基础: CS/index.md
+          - 计算机设置: CS/index.md
 
   - 计算机设置:
       - 概述: CS/index.md
