@@ -5,8 +5,8 @@
     --md-primary-fg-color: #3F51B5; 
     --page-bg-color: #f5f7f9; 
     --sidebar-bg-color: #f8f9fa;
-    /* 【核心修复】直接告诉主题顶栏高度是 4.5rem，让它自动对齐 */
-    --md-header-height: 3.0rem; 
+    /* 调小顶栏高度，2.4rem 是官方默认的舒适高度，您也可以继续改小如 2.0rem */
+    --md-header-height: 2.4rem;  
 }
 
 [data-md-color-scheme="slate"] {
