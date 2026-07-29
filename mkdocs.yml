@@ -1,13 +1,13 @@
 # 1. 基本信息
-site_name: 碎碎念
-site_description: 碎碎念
+site_name: Ramblings
+site_description: 主包在调教电脑过程中的一些碎碎念。。。
 site_author: Lucas
-site_url: https://ZJURay1110.github.io/note/
+site_url: https://ldray857.github.io/Ramblings/
 edit_uri: edit/main/docs/
 
 # 2. 仓库链接（右上角会显示 GitHub 图标）
 repo_name: note
-repo_url: https://github.com/ZJURay1110/note
+repo_url: https://github.com/ldray857/Ramblings
 
 # 3. 主题配置
 theme:
@@ -43,13 +43,13 @@ extra_css:
 # 4. 导航栏配置
 nav:
   - 首页:
-      - 展示首页: index.md
+      - 面板主页: index.md
       - 关于猪包: about.md
       - 快速索引:
-          - 计算机设置: CS/index.md
+          - 电脑设置: CS/index.md
 
-  - 计算机设置:
-      - 概述: CS/index.md
+  - 电脑设置:
+      - 前言: CS/index.md
       - 存储管理:
           - 总结: CS/cs_store/01_intro.md
           - 电脑C盘清理: CS/cs_store/02_电脑C盘清理.md

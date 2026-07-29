@@ -2,6 +2,8 @@
    1. 基础变量与深/浅模式适配
 ========================================================= */
 :root {
+    /* 英文使用原版 Roboto，中文回退到黑体 */
+    --md-text-font: "Roboto", "SimHei", "黑体", sans-serif;
     --md-primary-fg-color: #3F51B5; 
     --page-bg-color: #f5f7f9; 
     --sidebar-bg-color: #f8f9fa;
