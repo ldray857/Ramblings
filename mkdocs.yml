@@ -13,7 +13,6 @@ repo_url: https://github.com/ZJURay1110/note
 theme:
   name: material
   language: zh
-  favicon: assets/favicon.png
   palette: 
     - media: "(prefers-color-scheme: light)"
       scheme: default
