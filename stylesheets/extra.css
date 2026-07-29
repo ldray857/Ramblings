@@ -1,0 +1,146 @@
+/* =========================================================
+   1. 基础变量与深/浅模式适配 (Global Variables & Theme Modes)
+========================================================= */
+:root {
+    --md-text-font: "Roboto", "SimHei", "黑体", sans-serif;
+    --md-primary-fg-color: #573fb5; 
+    --page-bg-color: #f5f7f9; 
+    --md-header-height: 2.3rem;  
+    --md-sidebar-width: 16rem; /* 增加侧边栏的默认宽度 (原版约为 12.1~15rem)，让长标题有更多空间 */
+    --heading-1-color: #4444444;    
+    --heading-sub-color: #444444;  
+}
+
+[data-md-color-scheme="slate"] {
+    --page-bg-color: #121417; 
+    --heading-1-color: #ffffff;    
+    --heading-sub-color: #cccccc;  
+}
+
+body { background-color: var(--page-bg-color) !important; }
+
+/* =========================================================
+   2. 顶栏拉伸与布局 (Header Layout)
+========================================================= */
+.md-header__inner {
+    height: var(--md-header-height);
+    display: flex;
+    align-items: center;
+}
+
+.md-main__inner {
+    padding-top: 0 !important; 
+    margin-top: 0 !important;
+}
+
+/* =========================================================
+   3. 侧边栏及正文悬浮卡片 (Sidebar & Card UI)
+========================================================= */
+.md-sidebar { 
+    border: none !important; 
+    padding-top: 0.6rem !important; /* 统一设为 0.6rem，和中间卡片的 margin-top 保持绝对一致 */
+}
+
+/* 让侧边栏铺上“灰蒙蒙”的背景色，像悬浮面板一样 */
+.md-sidebar__scrollwrap {
+    margin-top: 0 !important; /* 移除额外外边距，直接靠上对齐 */
+    background-color: var(--md-default-bg-color) !important;
+    border-radius: 12px; 
+    padding: 0.5rem 0.5rem; 
+}
+
+/* 恢复原生标题的背景和阴影控制，不再强制透明 */
+.md-nav__title {
+    box-shadow: none !important; /* 仅去除多余的阴影即可 */
+}
+
+/* 宽屏下的悬浮卡片样式 */
+@media screen and (min-width: 76.25em) {
+    .md-content {
+        background-color: var(--md-default-bg-color) !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); 
+        border-radius: 12px;
+        margin: 0.6rem 0.8rem 1.5rem 0.8rem !important; /* 这里是 0.6rem，侧边栏也调成了 0.6rem */
+        padding: 0.5rem 1.2rem 1.2rem 1.2rem !important; /* 增加一点内边距，这能阻止内部 H1 标题的 margin 穿透导致卡片异常下沉 */
+        min-height: 85vh; /* 设置最小高度，即使内容很少也能撑起一整页的美观度 */
+    }
+}
+
+/* =========================================================
+   4. 细节微调 (Details & Tweaks)
+========================================================= */
+.md-logo { display: none !important; }
+.md-search { padding-top: 0.2rem; }
+
+::-webkit-scrollbar { width: 6px; } 
+::-webkit-scrollbar-thumb { 
+    background: rgba(128, 128, 128, 0.2); 
+    border-radius: 10px; 
+}
+
+.md-typeset .admonition { 
+    border-radius: 8px; 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+}
+
+/* =========================================================
+   5. 正文 Markdown 标题排版定制 (Markdown Headings)
+========================================================= */
+.md-typeset h1, 
+.md-typeset h2, 
+.md-typeset h3, 
+.md-typeset h4, 
+.md-typeset h5, 
+.md-typeset h6 {
+    font-family: "SimHei", "黑体", sans-serif !important;
+    font-weight: bold !important;
+    margin-bottom: 0.4em !important; /* 缩小标题距离下方段落的距离 */
+}
+
+.md-typeset h1 {
+    color: var(--heading-1-color) !important;
+    margin-top: 0.2em !important; /* 减小最顶部 H1 的外边距，防止它在卡片内部顶出太大空白 */
+}
+
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4,
+.md-typeset h5,
+.md-typeset h6 {
+    color: var(--heading-sub-color) !important;
+}
+
+/* =========================================================
+   6. 侧边导航与顶栏标签字体定制 (Navigation Fonts)
+========================================================= */
+.md-sidebar .md-nav__title,
+.md-sidebar .md-nav__item--section > .md-nav__link,
+.md-sidebar .md-nav__item--section > label.md-nav__link {
+    font-family: "Roboto", "Microsoft YaHei", "微软雅黑", sans-serif !important; /* 侧边栏专属字体 */
+    font-size: 0.85rem !important; 
+    color: #003F88 !important; 
+    font-weight: bold !important; 
+}
+
+[data-md-color-scheme="slate"] .md-sidebar .md-nav__title,
+[data-md-color-scheme="slate"] .md-sidebar .md-nav__item--section > .md-nav__link,
+[data-md-color-scheme="slate"] .md-sidebar .md-nav__item--section > label.md-nav__link {
+    color: #79b8ff !important; 
+}
+
+.md-nav__link {
+    font-family: "Roboto", "Microsoft YaHei", "微软雅黑", sans-serif !important; /* 侧边栏链接专属字体 */
+    font-size: 0.75rem !important;  
+    font-weight: 550 !important;   
+}
+
+.md-tabs__link {
+    font-family: "Roboto", "Microsoft YaHei", "微软雅黑", sans-serif !important; /* 顶部标签栏专属字体 */
+    font-size: 0.85rem !important; 
+    font-weight: 550 !important;   
+}
+
+.md-typeset hr {
+    border-bottom: 1.5px solid var(--md-default-fg-color--lighter) !important; 
+    margin: 2em 0 !important; 
+}

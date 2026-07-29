@@ -1,0 +1,2097 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="主包在调教电脑过程中的一些碎碎念。。。">
+      
+      
+        <meta name="author" content="Lucas">
+      
+      
+        <link rel="canonical" href="https://ldray857.github.io/Ramblings/Code/GISSA/Lect13_Remote_Sensing_Imagery_Super_Resolution/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>空间分析课程复习笔记 - 第13讲 遥感影像超分辨率重建 (Super-Resolution for Remote Sensing Image, RSI) - Ramblings</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#-13-super-resolution-for-remote-sensing-image-rsi" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="Ramblings" class="md-header__button md-logo" aria-label="Ramblings" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Ramblings
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              空间分析课程复习笔记 - 第13讲 遥感影像超分辨率重建 (Super-Resolution for Remote Sensing Image, RSI)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="切换至深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换至深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="切换至浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换至浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ldray857/Ramblings" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    note
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../.." class="md-tabs__link">
+          
+  
+  
+  首页
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../CS/" class="md-tabs__link">
+          
+  
+  
+  电脑设置
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../GISApp/01_intro/" class="md-tabs__link">
+          
+  
+  
+  GIS配置
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../" class="md-tabs__link">
+          
+  
+  
+  课程笔记
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Ramblings" class="md-nav__button md-logo" aria-label="Ramblings" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Ramblings
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ldray857/Ramblings" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    note
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    首页
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    面板主页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    关于猪包
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_1_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_3" id="__nav_1_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    快速索引
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    快速索引
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_1_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_3_1" id="__nav_1_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    电脑设置
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    电脑设置
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../CS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    前言
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../CS/cs_store/01_intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    存储管理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_1_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_3_2" id="__nav_1_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GIS配置
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GIS配置
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../GISApp/01_intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    前言
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../GISApp/GeoServer/02_GeoServer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GeoServer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../GISApp/ArcGIS/03_ArcGIS_01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ArcGIS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_1_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_3_3" id="__nav_1_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    课程笔记
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    课程笔记
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    前言
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Python/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JavaScript/01_%E7%AE%80%E4%BB%8B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JavaScript
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Lect1_Introduction_to_GIS_Spatial_Analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GIS空间分析
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    电脑设置
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    电脑设置
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../CS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    前言
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    存储管理
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    存储管理
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../CS/cs_store/01_intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    存储管理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../CS/cs_store/02_%E7%94%B5%E8%84%91C%E7%9B%98%E6%B8%85%E7%90%86/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    电脑C盘清理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GIS配置
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GIS配置
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../GISApp/01_intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    前言
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GeoServer
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GeoServer
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../GISApp/GeoServer/02_GeoServer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GeoServer
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ArcGIS
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ArcGIS
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../GISApp/ArcGIS/03_ArcGIS_01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ArcGIS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../GISApp/ArcGIS/03_ArcGIS_02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ArcGIS Pro 3.3配置
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    课程笔记
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    课程笔记
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    前言
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Python/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../JavaScript/01_%E7%AE%80%E4%BB%8B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JavaScript
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Lect1_Introduction_to_GIS_Spatial_Analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GIS空间分析
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#review-of-rsi-super-resolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、 遥感影像超分辨率重建回顾 (Review of RSI Super-Resolution)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="一、 遥感影像超分辨率重建回顾 (Review of RSI Super-Resolution)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-definition-and-types-of-rsisr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 定义与类型 (Definition and Types of RSISR)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-rsisr-why-is-rsisr-important" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 为什么 RSISR 如此重要？ (Why Is RSISR Important?)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-rsisr-application-scenarios-of-rsisr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. RSISR 的应用场景 (Application Scenarios of RSISR)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#traditional-methods-for-rsisr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、 传统超分方法 (Traditional Methods for RSISR)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="二、 传统超分方法 (Traditional Methods for RSISR)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-interpolation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 插值法 (Interpolation)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-sparse-coding-based-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 基于稀疏编码法 (Sparse coding-based methods)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-regression-based-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 基于回归法 (Regression-based methods)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-pan-sharpening" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 全色锐化 (Pan Sharpening)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-weaknesses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 传统方法的弱点 (Weaknesses)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deep-learning-methods-for-rsisr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、 深度学习超分方法 (Deep Learning Methods for RSISR)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="三、 深度学习超分方法 (Deep Learning Methods for RSISR)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-cnn-cnn-based-rsisr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 基于 CNN 的方法 (CNN-Based RSISR)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-transformer-transformer-based-rsisr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 基于 Transformer 的方法 (Transformer-based RSISR)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 其他深度学习方法
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-evaluation-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、 性能评估方法 (Performance Evaluation Methods)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#future-prospects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、 未来展望 (Future Prospects)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、 研究案例 (Cases)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="-13-super-resolution-for-remote-sensing-image-rsi">空间分析课程复习笔记 - 第13讲 遥感影像超分辨率重建 (Super-Resolution for Remote Sensing Image, RSI)<a class="headerlink" href="#-13-super-resolution-for-remote-sensing-image-rsi" title="Permanent link">&para;</a></h1>
+<p>本笔记基于《Lect. 13 Super-Resolution for Remote Sensing Image (RSI)》课件整理，严格遵循课件的语言表述。</p>
+<h2 id="review-of-rsi-super-resolution">一、 遥感影像超分辨率重建回顾 (Review of RSI Super-Resolution)<a class="headerlink" href="#review-of-rsi-super-resolution" title="Permanent link">&para;</a></h2>
+<h3 id="1-definition-and-types-of-rsisr">1. 定义与类型 (Definition and Types of RSISR)<a class="headerlink" href="#1-definition-and-types-of-rsisr" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>图像超分辨率定义 (Definition of Image Super-Resolution)</strong>：超分辨率 (SR) 是指从同一场景的一幅或多幅低分辨率 (low-resolution) 图像重建或生成高分辨率 (high-resolution) 图像的技术。</li>
+<li><strong>RSISR 的类型 (Types of RSISR)</strong>：<ul>
+<li><strong>根据输入划分 (According to the input)</strong>：<ol>
+<li><strong>单图像超分辨率 (Single-Image Super-Resolution, SISR)</strong>：从一张低分辨率图像重建高分辨率图像。</li>
+<li><strong>多图像/多帧超分辨率 (Multi-Image / Multi-Frame Super-Resolution, MISR/MFSR)</strong>：从同一场景的多张低分辨率图像重建高分辨率图像，通常伴随亚像素偏移。</li>
+</ol>
+</li>
+<li><strong>根据是否使用深度学习划分</strong>：传统方法 (Traditional Methods) 与 深度学习方法 (Deep Learning Methods)。</li>
+<li><strong>根据是否使用监督方法划分</strong>：有监督方法 (Supervised methods) 与 无监督方法 (Unsupervised methods)。</li>
+<li><strong>根据遥感影像模态划分</strong>：光学 (Optical)、合成孔径雷达 (SAR)、红外 (Infrared) 和 激光雷达 (LiDAR) 超分辨率方法。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-rsisr-why-is-rsisr-important">2. 为什么 RSISR 如此重要？ (Why Is RSISR Important?)<a class="headerlink" href="#2-rsisr-why-is-rsisr-important" title="Permanent link">&para;</a></h3>
+<p>从 Web of Science 的数据来看，自2014年起关于 RSI 的 SR 算法论文数量逐年攀升。需要 RSISR 的根本原因是：许多对地观测应用需要比原始卫星或机载传感器所能提供的<strong>更精细的空间细节 (finer spatial details)</strong>。
+1.  <strong>克服传感器分辨率的限制 (To overcome sensor resolution limitations)</strong>：遥感传感器受硬件、轨道高度、成本、重访频率和物理成像条件的限制。高分卫星昂贵且覆盖范围或重访时间有限。超分提供了一种<strong>不改变传感器硬件</strong>就能提高影像空间分辨率的方法。
+2.  <strong>获取更详细的地面信息 (To obtain more detailed ground information)</strong>：低分辨率影像经常丢失小尺度的空间细节。超分可以使对象和边界（如建筑物、道路、河流、车辆、船舶、城市结构）更加清晰。
+3.  <strong>减少混合像元问题 (To reduce mixed-pixel problems)</strong>：在中低分辨率影像中，一个像素可能包含多种土地覆盖类型。超分有助于提供更精细的空间信息，改善土地覆盖分类和目标提取。
+4.  <strong>改善下游遥感任务 (To improve downstream remote sensing task)</strong>：高分辨率影像可以改善土地利用/覆盖分类、目标检测、语义分割、变化检测、灾害评估、城市监测、农业和环境监测等。
+5.  <strong>提升现有遥感数据的价值 (To enhance the value of existing remote sensing data)</strong>：提升历史低分辨率档案影像的视觉质量和分析可用性，使其对长期研究（如城市扩张、植被变化、气候分析）更有价值。
+6.  <strong>平衡空间、光谱和时间分辨率的权衡 (To balance spatial, spectral, and temporal resolution trade-offs)</strong>。</p>
+<h3 id="3-rsisr-application-scenarios-of-rsisr">3. RSISR 的应用场景 (Application Scenarios of RSISR)<a class="headerlink" href="#3-rsisr-application-scenarios-of-rsisr" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>核心作用</strong>：在不改变传感器硬件条件的情况下，提高遥感影像的空间分辨率，从而增强目标细节表达、解译能力和下游任务性能。</li>
+<li><strong>应用场景1：细节增强</strong>。增强纹理、边缘和形状信息，使小目标或边界更清晰，有助于自动识别与人工判读。提升：目标可分辨性、边界完整性、纹理清晰度、检测与分割精度。</li>
+<li><strong>应用场景2：下游任务提升类</strong>。分类、目标检测、分割、变化检测。</li>
+<li><strong>应用场景3：专业监测类</strong>。农业、林业、城市、灾害、军事。</li>
+<li><strong>应用场景4：数据融合与预处理</strong>。多源分辨率匹配、高光谱空间增强、历史数据再利用。</li>
+</ul>
+<p><em>开源数据集包括：UCMD, WHU-RS19, RSSCN7, AID, KOSD, SIRI-WHU, NWPU-RESISC45, PatternNet, DOTA, SpaceNet2, DFC2019, OPTIMAL-31, RSI-CB。</em></p>
+<hr />
+<h2 id="traditional-methods-for-rsisr">二、 传统超分方法 (Traditional Methods for RSISR)<a class="headerlink" href="#traditional-methods-for-rsisr" title="Permanent link">&para;</a></h2>
+<p>主要包括插值法、基于稀疏编码法、基于回归法、全色锐化法等。</p>
+<h3 id="1-interpolation">1. 插值法 (Interpolation)<a class="headerlink" href="#1-interpolation" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>代表算法</strong>：最近邻插值、双线性插值、<strong>双三次插值 (Cubic Convolution)</strong>。</li>
+<li><strong>原理</strong>：通过已知像素点的几何位置关系，直接估计未知像素的灰度值。</li>
+<li><strong>双三次卷积插值核心思想</strong>：<ul>
+<li>插值新像素值，不取最近点、不取平均。</li>
+<li>以待求像素为中心，选取周围 4行4列共 16 个原始像素。</li>
+<li>用三次多项式卷积核计算每个像素的权重，加权求和得到新像素灰度值。</li>
+<li><strong>标准三次卷积基函数</strong> (<span class="arithmatex">\(x\)</span> 为目标点与原始像素的距离偏移量)：
+    $$ W(x) = \begin{cases} 1 - 2|x|^2 + |x|^3, &amp; 0 \le |x| &lt; 1 \ 4 - 8|x| + 5|x|^2 - |x|^3, &amp; 1 \le |x| &lt; 2 \ 0, &amp; |x| \ge 2 \end{cases} $$</li>
+</ul>
+</li>
+<li><strong>局限性</strong>：本质是信号重采样，无真实信息恢复，图像边缘易模糊或出现锯齿，高频细节丢失严重。</li>
+</ul>
+<h3 id="2-sparse-coding-based-methods">2. 基于稀疏编码法 (Sparse coding-based methods)<a class="headerlink" href="#2-sparse-coding-based-methods" title="Permanent link">&para;</a></h3>
+<p>包含三个算法步骤：
+1.  <strong>字典学习 (Dictionary Learning)</strong>：从配对的低/高分训练图像块中学习 LR/HR 字典，建立稀疏表示对应关系。
+2.  <strong>稀疏编码 (Sparse Coding)</strong>：对输入LR图像块提取特征，并在LR字典上求解稀疏系数。
+3.  <strong>高分重建 (HR Reconstruction)</strong>：利用稀疏系数在HR字典中重建对应的HR图像块并融合。</p>
+<h3 id="3-regression-based-methods">3. 基于回归法 (Regression-based methods)<a class="headerlink" href="#3-regression-based-methods" title="Permanent link">&para;</a></h3>
+<p>将超分视为回归问题，学习 LR 和 HR 图像之间的函数映射。通常提取 LR 特征训练回归模型，再预测 HR 图像。
+包含核心回归 (Kernel Regression)、支持向量回归 (SVR)、广义回归神经网络 (GRNN) 等。</p>
+<h3 id="4-pan-sharpening">4. 全色锐化 (Pan Sharpening)<a class="headerlink" href="#4-pan-sharpening" title="Permanent link">&para;</a></h3>
+<p>使用较高分辨率的全色影像（或波段）与较低分辨率的多光谱数据集融合，生成具备全色栅格分辨率的多光谱数据集。
+*   <strong>Brovey 变换</strong>：将重采样的多光谱像素乘以（相应全色像素亮度 / 所有多光谱亮度总和）。
+    *   3个波段：<span class="arithmatex">\(Red\_out = Red\_in / [(Blue\_in + Green\_in + Red\_in) \times Pan]\)</span>
+*   <strong>Esri 全色锐化</strong>：使用加权平均和附加近红外波段创建。<span class="arithmatex">\(WA = W_R R + W_G G + W_B B\)</span> （权重和为1，取决于灵敏度曲线与全色波段重叠程度），<span class="arithmatex">\(ADJ = pan - WA\)</span>，最终输出如 <span class="arithmatex">\(Red\_out = R + ADJ\)</span>。
+*   <strong>Gram-Schmidt</strong>：核心是用<strong>向量正交化</strong>分离空间与光谱信息。视波段为高维向量，逐次正交化得到互不相关分量，用高分 PAN 替换第一正交分量，再逆变换重建高分多光谱影像。
+*   <strong>IHS 变换 (Intensity-Hue-Saturation)</strong>：将多光谱转为 IHS 空间。保留色调 H（地物颜色属性）和饱和度 S，用高分 PAN 替换亮度 I（明暗/空间纹理信息），再逆变换回 RGB。</p>
+<h3 id="5-weaknesses">5. 传统方法的弱点 (Weaknesses)<a class="headerlink" href="#5-weaknesses" title="Permanent link">&para;</a></h3>
+<ul>
+<li>研究主要集中在 2016 年之前。计算相对简单，适合硬件受限场景。</li>
+<li><strong>严重依赖局部像素关系</strong>，无法充分提取深层特征和高级语义信息，导致性能不佳。</li>
+<li>在高倍数 (如 4x 或 8x) 重建任务中，往往无法恢复足够细节，导致模糊或失真。例如，回归方法极易受噪声影响，降低重建质量。</li>
+</ul>
+<hr />
+<h2 id="deep-learning-methods-for-rsisr">三、 深度学习超分方法 (Deep Learning Methods for RSISR)<a class="headerlink" href="#deep-learning-methods-for-rsisr" title="Permanent link">&para;</a></h2>
+<h3 id="1-cnn-cnn-based-rsisr">1. 基于 CNN 的方法 (CNN-Based RSISR)<a class="headerlink" href="#1-cnn-cnn-based-rsisr" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>SRCNN (Super-Resolution CNN)</strong>：<ul>
+<li>于 2014 年提出，是深度学习图像超分领域的<strong>开山之作</strong>，奠定了基于 CNN 的单图像超分辨研究范式。</li>
+<li>流程：图像块提取 (对LR图像插值放大后利用卷积提取浅层特征) <span class="arithmatex">\(\rightarrow\)</span> 非线性映射 <span class="arithmatex">\(\rightarrow\)</span> 图像重建。</li>
+<li><strong>优点</strong>：结构简洁，效果显著优于传统方法。</li>
+<li><strong>缺点</strong>：计算效率偏低 (在放大后的 HR 特征图上运算)，感受野较小且依赖预处理插值。</li>
+</ul>
+</li>
+<li><strong>msiSRCNN</strong>：第一个基于 CNN 且利用遥感数据 (Sentinel-2) 训练和微调 SRCNN 的 RSISR 模型。</li>
+<li><strong>ESPCN (Efficient Sub-Pixel CNN)</strong>：<ul>
+<li><strong>核心思想</strong>：提出 <strong>亚像素卷积层 (Sub-pixel Convolution)</strong>，引入高效亚像素卷积实现端到端上采样。彻底颠覆了传统“先插值放大、后卷积”的流程。网络在 LR 特征图上完成所有卷积，最后通过亚像素卷积层的像素重排机制映射为 HR 图像。极大降低了计算复杂度。</li>
+<li><strong>优点</strong>：推理速度极快；重建效果优于 SRCNN。</li>
+<li><strong>缺点</strong>：网络结构相对简单，感受野较小，对复杂纹理恢复能力不如深层网络，大尺度受限。</li>
+</ul>
+</li>
+<li><strong>其他</strong>：EDSR (移除批量归一化，深层残差)、RCAN (通道注意力)、RNAN、HAN 等。</li>
+</ul>
+<h3 id="2-transformer-transformer-based-rsisr">2. 基于 Transformer 的方法 (Transformer-based RSISR)<a class="headerlink" href="#2-transformer-transformer-based-rsisr" title="Permanent link">&para;</a></h3>
+<p>结合 CNN 局部特征提取能力与 Transformer 全局特征建模优势。
+*   <strong>SwinIR</strong> (2021)：基于窗口自注意力机制的经典超分模型。
+*   <strong>HAT</strong> (2023)：结合通道注意力与窗口自注意力、重叠交叉注意力模块。
+*   <strong>TTST</strong> (2024)：针对遥感图像特性设计，采用 Top-k Token 可选择注意力机制。</p>
+<h3 id="3">3. 其他深度学习方法<a class="headerlink" href="#3" title="Permanent link">&para;</a></h3>
+<ul>
+<li>基于 GAN 的 RSISR。</li>
+<li>基于 Mamba 的 RSISR。</li>
+<li>基于 Diffusion model (扩散模型) 的 RSISR。</li>
+<li>Hybrid RSISR methods (混合方法)。</li>
+</ul>
+<hr />
+<h2 id="performance-evaluation-methods">四、 性能评估方法 (Performance Evaluation Methods)<a class="headerlink" href="#performance-evaluation-methods" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>定性评估 (Qualitative evaluation)</strong>：<ul>
+<li>视觉比较 (Visual Comparison)</li>
+<li>专家视觉评估 (Expert visual evaluation)</li>
+<li>应用引导评估 (Application-guided evaluation)</li>
+</ul>
+</li>
+<li><strong>定量评估 (Quantitative evaluation)</strong>：<ul>
+<li><strong>MSE</strong>：均方误差 (mean square error, 课件中写作 mean square area)</li>
+<li><strong>RMSE</strong>：均方根误差 (root mean square error, 课件写作 root mean square area)</li>
+<li><strong>PSNR</strong>：峰值信噪比 (peak signal-to-noise ratio)</li>
+<li><strong>SSIM</strong>：结构相似性 (structural similarity)</li>
+<li><strong>LPIPS</strong>：感知图像块相似性 (learned perceptual image patch similarity)</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="future-prospects">五、 未来展望 (Future Prospects)<a class="headerlink" href="#future-prospects" title="Permanent link">&para;</a></h2>
+<ol>
+<li>在 RSISR 中进行真实世界退化建模 (Real-world degradation modeling in RSISR)。</li>
+<li>RSISR 中的基础模型和迁移学习 (Foundation models and transfer learning in RSISR)。</li>
+<li>多模态 RSISR 方法 (Multi-modal RSISR methods)。</li>
+<li>更好的评估指标和基准测试 (Better evaluation metrics and benchmarks)。</li>
+<li>基于 Diffusion-Mamba 的 RSISR 方法。</li>
+</ol>
+<hr />
+<h2 id="cases">六、 研究案例 (Cases)<a class="headerlink" href="#cases" title="Permanent link">&para;</a></h2>
+<p>课件列举了几个相关的文献案例：
+1.  通过带有分层密集采样和链式训练的生成对抗网络进行单幅遥感图像超分辨率。
+2.  使用 Landsat 光谱-时间指标的超分辨率和中心块分类以 10米 分辨率绘制 2000 年至 2022 年城市建成区类型。
+3.  SeG-SR: 通过视觉-语言模型将语义知识集成到遥感图像超分辨率中。
+4.  通过 STARS-Net (一种时空注意力参考的超分网络) 从 1985 到 2015 检索 10米 分辨率的历史图像。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
