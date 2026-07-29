@@ -58,6 +58,8 @@ nav:
 
 # 5. Markdown 增强插件（支持公式、警告框、复杂表格）
 markdown_extensions:
+  - attr_list             # 允许在 Markdown 后面加花括号属性
+  - md_in_html            # 允许在 HTML 标签内解析 Markdown
   - admonition            # 提示框 !!! info
   - pymdownx.details      # 折叠块 ??? note
   - pymdownx.superfences  # 嵌套代码块
