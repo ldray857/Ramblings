@@ -1,0 +1,76 @@
+# 1. 基本信息
+site_name: GIS | CodingNote
+site_description: 一些coding note
+site_author: Lucas
+site_url: https://ZJURay1110.github.io/note/
+edit_uri: edit/main/docs/
+
+# 2. 仓库链接（右上角会显示 GitHub 图标）
+repo_name: note
+repo_url: https://github.com/ZJURay1110/note
+
+# 3. 主题配置
+theme:
+  name: material
+  language: zh
+  favicon: assets/favicon.png
+  logo: assets/avatar.jpg
+  palette: 
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: 切换至深色模式
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: 切换至浅色模式
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+extra_css:
+  - stylesheets/extra.css
+
+# 4. 导航栏配置
+nav:
+  - 首页:
+      - 门户中心: index.md
+      - 关于作者: about.md
+      - 快速索引:
+          - 计算机基础: CS/index.md
+
+  - 计算机设置:
+      - 概述: CS/index.md
+      - 存储管理:
+          - 总结: CS/cs_store/01_intro.md
+          - 电脑C盘清理: CS/cs_store/02_电脑C盘清理.md
+
+# 5. Markdown 增强插件（支持公式、警告框、复杂表格）
+markdown_extensions:
+  - admonition            # 提示框 !!! info
+  - pymdownx.details      # 折叠块 ??? note
+  - pymdownx.superfences  # 嵌套代码块
+  - pymdownx.inlinehilite # 行内代码高亮
+  - pymdownx.magiclink    # 自动识别链接
+  - pymdownx.arithmatex:  # 数学公式支持 (GIS 学术必备)
+      generic: true
+  - pymdownx.tasklist:    # 待办事项列表
+      custom_checkbox: true
+  - tables                # 标准表格
+  - toc:
+      permalink: true     # 标题右侧锚点
+
+# 6. 额外的 JS/CSS（用于渲染数学公式等）
+extra_javascript:
+   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
