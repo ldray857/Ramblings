@@ -46,13 +46,39 @@ nav:
       - 面板主页: index.md
       - 关于猪包: about.md
       - 快速索引:
-          - 电脑设置: CS/index.md
+          - 电脑设置:
+              - 前言: CS/index.md
+              - 存储管理: CS/cs_store/01_intro.md
+          - GIS配置:
+              - 前言: GISApp/01_intro.md
+              - GeoServer: GISApp/GeoServer/02_GeoServer.md
+              - ArcGIS: GISApp/ArcGIS/03_ArcGIS_01.md
+          - 课程笔记:
+              - 前言: Code/index.md
+              - Python: Code/Python/index.md
+              - JavaScript: Code/JavaScript/01_简介.md
+              - GIS空间分析: Code/GISSA/Lect1_Introduction_to_GIS_Spatial_Analysis.md
 
   - 电脑设置:
       - 前言: CS/index.md
       - 存储管理:
           - 总结: CS/cs_store/01_intro.md
           - 电脑C盘清理: CS/cs_store/02_电脑C盘清理.md
+
+  - GIS配置:
+      - 前言: GISApp/01_intro.md
+      - GeoServer:
+          - GeoServer配置: GISApp/GeoServer/02_GeoServer.md
+      - ArcGIS:
+          - ArcGIS产品介绍: GISApp/ArcGIS/03_ArcGIS_01.md
+          - ArcGIS Pro 3.3配置: GISApp/ArcGIS/03_ArcGIS_02.md
+  
+  - 课程笔记:
+      - 前言: Code/index.md
+      - Python: Code/Python/index.md
+      - JavaScript: Code/JavaScript/01_简介.md
+      - GIS空间分析: Code/GISSA/Lect1_Introduction_to_GIS_Spatial_Analysis.md
+
 
 # 5. Markdown 增强插件（支持公式、警告框、复杂表格）
 markdown_extensions:

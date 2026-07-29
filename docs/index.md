@@ -1,4 +1,5 @@
-# 关于奴隶主如何调教电脑
+# 一些碎碎念
+
 
 <div style="display: flex; align-items: center; gap: 24px; margin: 25px 0; padding: 20px; background-color: rgba(52, 90, 197, 0.04); border-radius: 12px; border: 1px solid rgba(66, 133, 244, 0.1);">
     <img src="assets/avatar.jpg" style="width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
