@@ -14,7 +14,6 @@ theme:
   name: material
   language: zh
   favicon: assets/favicon.png
-  logo: assets/avatar.jpg
   palette: 
     - media: "(prefers-color-scheme: light)"
       scheme: default

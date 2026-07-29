@@ -59,7 +59,7 @@ body { background-color: var(--page-bg-color); }
 /* =========================================================
    4. 细节微调
 ========================================================= */
-.md-logo img { height: 2.2rem; width: auto; }
+.md-logo { display: none !important; }
 .md-search { padding-top: 0.2rem; }
 
 /* 滚动条 */
